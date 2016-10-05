@@ -1,0 +1,41 @@
+<ion-content>
+    <div style="height:30%">
+        <ion-slides [options]="homeSliderOptions">
+            <ion-slide>
+                <img src="img/slide_img1.jpg" />
+            </ion-slide>
+
+            <ion-slide>
+                <img src="img/slide_img2.jpg"/>
+            </ion-slide>
+
+            <ion-slide>
+                <img src="img/slide_img3.jpg"/>
+            </ion-slide>
+        </ion-slides>
+    </div>
+    <ion-item-group>
+        <ion-item-divider primary>Now Streaming</ion-item-divider>
+        <ion-card style="height: 87%" no-lines>
+            <div>
+                <img src="img/cover_art.jpg">
+                <button fab style="position:relative;margin-top:-18%;left:80%" fab-right>
+                <ion-icon name="play"></ion-icon>
+            </button>
+                <ion-item>
+                    <h1 primary>Vanakkam Thamizha</h1>
+                    <h2 padding-top>Hosted By: </h2>
+                </ion-item>
+                <ion-item>
+                    <ion-avatar item-left large>
+                        <img src="img/person.jpg">
+                    </ion-avatar>
+                    <div>
+                        <p text-capitalize>RJ kaushik (mottai)</p>
+                        <p style="font-style: italic;font-weight: bold;">"I'm not bad, just evil."</p>
+                    </div>
+                </ion-item>
+            </div>
+        </ion-card>
+    </ion-item-group>
+</ion-content>

@@ -1,0 +1,54 @@
+<ion-content>
+    <ion-slides style="height : 30%" [options]="homeSliderOptions">
+        <ion-slide>
+            <img src="img/slide_img1.jpg" />
+        </ion-slide>
+
+        <ion-slide>
+            <img src="img/slide_img2.jpg" />
+        </ion-slide>
+
+        <ion-slide>
+            <img src="img/slide_img3.jpg" />
+        </ion-slide>
+    </ion-slides>
+    <ion-card style="height : 70%;">
+        <ion-card-header>
+            <h1 text-justify text-uppercase primary>Program 1</h1>
+            <h2 margin-top text-uppercase>Hosted By:</h2>
+        </ion-card-header>
+        <div style="white-space : normal">
+            <ion-grid>
+                <ion-row wrap style="height: 70%">
+                    <ion-col style="width:35%" no-padding>
+                        <img src="img/person.jpg" style="max-height : 150px">
+                    </ion-col>
+                    <ion-col style="width:65%">
+                        <ion-grid>
+                            <ion-row wrap margin-bottom>
+                                <ion-col style="width:40%">
+                                    <span primary>Name : </span>
+                                </ion-col>
+                                <ion-col style="width:60%">Kaushik</ion-col>
+                            </ion-row>
+                            <ion-row wrap margin-bottom>
+                                <ion-col style="width:40%">
+                                    <span primary>Alias : </span>
+                                </ion-col>
+                                <ion-col style="width:60%">Mottai</ion-col>
+                            </ion-row>
+                            <ion-row wrap margin-bottom>
+                                <ion-col>
+                                    <ion-icon name="logo-facebook" large></ion-icon>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-col>
+                </ion-row>
+                <ion-row style="height: 30%">
+                    <ion-col>Some shit</ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+    </ion-card>
+</ion-content>

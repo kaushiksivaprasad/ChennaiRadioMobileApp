@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {RegistrationService} from '../../service/registration';
 import { AlertController, NavController} from 'ionic-angular';
 import {SignupPage} from '../signup/signup';
-import Utils from '../../utils/utils'
+import Utils from '../../utils/utils';
 
 @Component({
   templateUrl: 'build/pages/login/login.html'
