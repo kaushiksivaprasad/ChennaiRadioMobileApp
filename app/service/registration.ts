@@ -39,4 +39,7 @@ export class RegistrationService {
         // return new 
         // Promise.reject(error.message || error);
     }
+    getResourceUrl(): String {
+        return '';
+    }
 }

@@ -1,6 +1,7 @@
 <ion-content>
     <div style="height:30%">
-        <ion-slides [options]="homeSliderOptions">
+        <ion-slides *ng-if="imgList && imgList.length>0" [options]="homeSliderOptions">
+            
             <ion-slide>
                 <img src="img/slide_img1.jpg" />
             </ion-slide>
@@ -12,6 +13,14 @@
             <ion-slide>
                 <img src="img/slide_img3.jpg"/>
             </ion-slide>
+        </ion-slides>
+        <ion-slides *ng-else [options]="homeSliderOptions" *ngFor="let img of imgList">
+            
+            <ion-slide>
+                <img src="{{ img }}" />
+            </ion-slide>
+
+           
         </ion-slides>
     </div>
     <ion-item-group>
