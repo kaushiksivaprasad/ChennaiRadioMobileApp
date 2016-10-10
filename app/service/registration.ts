@@ -1,21 +1,31 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter, Inject} from '@angular/core';
 import { Http, Response, Headers} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import Config from '../utils/system-config'
-import {User} from '../models/user'
+import Config from '../utils/system-config';
+import {User} from '../models/user';
 
 @Injectable()
 export class RegistrationService {
+    private resourceUrl: String;
+    private signedInUser: { email: String, password: String };
     private headers = new Headers({ 'Content-Type': 'application/json' });
-    constructor(private http: Http) {
+    public loginSuccesful = new EventEmitter<any>();
+    constructor( @Inject(Http) public http: Http) {
     }
 
     doLogin(user: { email: String, password: String }): Promise<Response> {
-        let url: string = Config.WS_URL + Config.LOGIN_RESOURCE + `?email=${user.email}&password=${user.password}`;
-        return this.http.get(url)
+        const url = Config.WS_URL + Config.LOGIN_RESOURCE;
+        return this.http.post(url, JSON.stringify(user), { headers: this.headers })
             .toPromise()
             .then(response => {
-                return response.json();
+                let responseJson = response.json();
+                if (responseJson.url) {
+                    this.resourceUrl = responseJson.url;
+                    this.signedInUser = user;
+                    this.loginSuccesful.emit(this.resourceUrl);
+                }
+                // this.wsService.initiateWebSocket();
+                return responseJson;
             })
             .catch(this.handleError);
     }
@@ -39,7 +49,18 @@ export class RegistrationService {
         // return new 
         // Promise.reject(error.message || error);
     }
+
     getResourceUrl(): String {
-        return '';
+        if (this.resourceUrl) {
+            return this.resourceUrl;
+        }
+        throw new Error('User not logged in');
+    }
+
+    getSignedInUserInfo(): { email: String, password: String } {
+        if (this.signedInUser) {
+            return this.signedInUser;
+        }
+        throw new Error('User not logged in');
     }
 }

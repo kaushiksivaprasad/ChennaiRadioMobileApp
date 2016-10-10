@@ -9,10 +9,11 @@ import Config from '../../utils/system-config'
   templateUrl: 'build/pages/signup/signup.html'
 })
 export class SignupPage {
-  constructor(private regService: RegistrationService,
+  constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    public regService: RegistrationService) {
   }
   toast: Toast = null;
   register(emailId, password, firstName, lastName, phoneNo) {

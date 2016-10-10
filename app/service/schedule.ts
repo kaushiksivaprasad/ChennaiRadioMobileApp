@@ -1,74 +1,51 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers} from '@angular/http';
+import { Injectable, EventEmitter} from '@angular/core';
+import { Http} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import Config from '../utils/system-config'
-import {User} from '../models/user'
-import {RegistrationService} from '../service/Registration'
-import moment = require("moment");
+import Config from '../utils/system-config';
+import * as moment from 'moment';
 
 @Injectable()
 export class ScheduleService {
-    private headers = new Headers({ 'Content-Type': 'application/json' });
-    private schedule = null;
-    private componentList: Array<any>;
-    constructor(private http: Http, private regService: RegistrationService) {
-        this.getSchedule();
+    private timeout = null;
+    public resourceUrl: String = null;
+    public scheduleRecieveEvent = new EventEmitter<any>();
+    constructor(public http: Http) {
     }
-    addListener(schedule: any): void {
-        this.componentList.push(schedule);
-    }
-
-
-    triggerListener(schedule: any): void {
-        for (let component of this.componentList) {
-            component.onScheduleRecieved(schedule);
-        }
-    }
-    checkEndOfSchedule(): void {
-
+    triggerFetchAtEndofSchedule(schedules): void {
         // All time is converted to GMT
-        let updateScheduleInHour: any = null;
-        let updateScheduleInMinutes: any = null;
+        if (schedules[0] && schedules[0].programs[0]) {
+            let endTimeInHour: number = + schedules[0].programs[0].endTimeInHour;
+            let endTimeInMinues: number = + schedules[0].programs[0].endTimeInMinutes;
 
-        let endTimeInHour: any = this.schedule[0].programs.endTimeInHour;
-        let endTimeInMinues: any = this.schedule[0].programs.endTimeInMinutes;
+            let currentTime = moment().utc().valueOf();
+            let futureTime = moment().utc().hours(endTimeInHour).minutes(endTimeInMinues).valueOf();
+            let diffTime = futureTime - currentTime;
 
-        let currentTimeInHour: any = moment().utc().format('H');
-        let currentTimeInMinutes: any = moment().utc().format('m');
-
-
-        updateScheduleInHour = (endTimeInHour - currentTimeInHour) * 60 * 60000; // hours to milliseconds
-        updateScheduleInMinutes = (endTimeInMinues - currentTimeInMinutes) * 60000; // minutes to milliseconds
-
-        setTimeout(() => {
-            this.getSchedule();
-        }, updateScheduleInHour + updateScheduleInMinutes);
-
-
+            this.timeout = setTimeout(() => {
+                clearTimeout(this.timeout);
+                this.getSchedule();
+            }, diffTime);
+            this.scheduleRecieveEvent.emit(schedules);
+        }
     }
 
 
     getSchedule(): void {
-
-        let url: string = Config.WS_URL + this.regService.getResourceUrl(); +"/schedule";
-        this.http.get(url)
-            .toPromise()
-            .then(response => {
-                this.schedule = response.json();
-                this.checkEndOfSchedule();
-            })
-            .catch(this.handleError);
-        // this.addListener(this.schedule);
-
+        if (this.resourceUrl) {
+            let url: string = this.resourceUrl + Config.SCHEDULE_RESOURCE;
+            this.http.get(url)
+                .toPromise()
+                .then(response => {
+                    let schedules = response.json();
+                    console.log('ScheduleService -> scheduleObtained'+JSON.stringify(schedules));
+                    this.triggerFetchAtEndofSchedule(schedules);
+                })
+                .catch(this.handleError);
+        }
     }
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.json());
-        // return new 
-        // Promise.reject(error.message || error);
     }
-
-
-
 }

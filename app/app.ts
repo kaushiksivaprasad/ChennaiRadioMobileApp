@@ -2,12 +2,15 @@ import {Component, ViewChild} from '@angular/core';
 import {ionicBootstrap, Platform, Nav} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {Login} from './pages/login/login';
-import {RegistrationService} from './service/registration'
-import {WebSocketService} from './service/websocket'
+import {HomeWrapper} from './pages/home-wrapper/home-wrapper';
+import {RegistrationService} from './service/registration';
+import {WebSocketService} from './service/websocket';
+import {ScheduleService} from './service/schedule';
+// import WebSocketService from './service/websocket';
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [RegistrationService,WebSocketService]
+  providers: [RegistrationService, WebSocketService, ScheduleService]
 })
 class MyApp {
   @ViewChild(Nav) nav: Nav;

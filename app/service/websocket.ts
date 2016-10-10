@@ -1,61 +1,53 @@
-import { Injectable, OnInit } from '@angular/core';
-import {RegistrationService} from '../service/Registration'
+import { Injectable, EventEmitter, Inject} from '@angular/core';
+import {Platform} from 'ionic-angular';
+import Config from '../utils/system-config';
 
 @Injectable()
-export class WebSocketService extends OnInit {
-    private componentList: Array<any>;
-    private ws = null;
-
-    constructor(private regService: RegistrationService) {
-        super();
-
-    }
-    ngOnInit() {
-        //called after the constructor and called  after the first ngOnChanges() 
-        this.initiateWebSocket();
-    }
-    addListener(componentInstance: any): void {
-        this.componentList.push(componentInstance);
-    }
-
-
-    triggerListener(event: any): void {
-        for (let component of this.componentList) {
-            component.onEventRecieved(event);
-        }
-    }
-    initiateWebSocket(): void {
-        let url = this.regService.getResourceUrl();
-
-        // Remove http or https from the url
-        if (url.substring(0, 4) == "http") {
-            url = url.replace("http", "");
-        } else if (url.substring(0, 5) == "https") {
-            url = url.replace("https", "");
-        }
-
-        this.ws = new WebSocket("ws://" + url + "ws");
-
-        this.ws.onopen = function () {
-            // Web Socket is connected, send data using send()
-            // ws.send("Message to send");
-            console.log("open");
-        };
-        this.ws.onmessage = evt => {
-
-            //append the event data into the component list
-            this.triggerListener(event);
-
-        };
-
-        this.ws.onclose = function () {
-            // websocket is closed.
-
-            setTimeout(function () {
+export class WebSocketService {
+    private ws: WebSocket = null;
+    public resourceUrl: String = null;
+    public adEvent = new EventEmitter<{ mess: Array<any> }>();
+    constructor( @Inject(Platform) public platform: Platform) {
+        this.platform.pause.subscribe(evt => {
+            if (this.ws) {
+                this.ws.close();
                 this.ws = null;
-            }, 1);
-            console.log("Connection is closed...");
-        };
+            }
+        });
+        this.platform.resume.subscribe(evt => {
+            if (!this.ws) {
+                this.initiateWebSocket();
+            }
+        });
+    }
+
+    initiateWebSocket(): void {
+        if (!this.ws && this.resourceUrl) {
+            let url = this.resourceUrl;
+            // Remove http or https from the url
+            if (url.substring(0, 4) === 'http') {
+                url = url.replace('http', Config.WS_RESOURCE);
+            } else if (url.substring(0, 5) === 'https') {
+                url = url.replace('https', Config.WS_RESOURCE);
+            }
+
+            this.ws = new WebSocket(url + Config.WS_RESOURCE);
+
+            this.ws.onopen = function() {
+                console.log('WebSocketService -> open');
+            };
+            this.ws.onmessage = (evt: MessageEvent) => {
+                var evtMess = evt.data;
+                this.adEvent.emit(JSON.parse(evtMess));
+                console.log('WebSocketService -> event recieved' + evtMess);
+                // this.triggerListener(event);
+            };
+
+            this.ws.onclose = function() {
+                this.ws = null;
+                console.log('WebSocketService -> Connection is closed...');
+            };
+        }
     }
 
 }

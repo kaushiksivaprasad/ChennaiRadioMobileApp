@@ -1,7 +1,12 @@
 <ion-content>
     hi from home-wrapper
-    <ion-tabs selectedIndex="1">
+    <!--<ion-tabs selectedIndex="1">
         <ion-tab [root]="nowPlaying" tabTitle="Now Playing">Now Playing</ion-tab>
         <ion-tab [root]="schedule" tabTitle="Schedule">Schedule</ion-tab>
-    </ion-tabs>
+    </ion-tabs>-->
+    <div *ngFor="let t of test;trackBy:t?.name">
+        <div>
+            <h4>{{t.name}}</h4>
+        </div>
+    </div>
 </ion-content>
