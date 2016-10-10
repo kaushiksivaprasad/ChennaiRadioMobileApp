@@ -10,34 +10,56 @@ import moment = require("moment");
 export class ScheduleService {
     private headers = new Headers({ 'Content-Type': 'application/json' });
     private schedule = null;
+    private componentList: Array<any>;
     constructor(private http: Http, private regService: RegistrationService) {
-        this.schedule = this.getSchedule();
+        this.getSchedule();
+    }
+    addListener(schedule: any): void {
+        this.componentList.push(schedule);
     }
 
+
+    triggerListener(schedule: any): void {
+        for (let component of this.componentList) {
+            component.onScheduleRecieved(schedule);
+        }
+    }
     checkEndOfSchedule(): void {
 
         // All time is converted to GMT
-        
-        let endTimeInHour =this.schedule[0].programs.endTimeInHour;
-        let endTimeInMinues =this.schedule[0].programs.endTimeInMinutes;
-        
-        
-        let currentTimeInHour = moment().utc().format('H');
-        let currentTimeInMinutes = new Date().getMinutes(); 
-      
+        let updateScheduleInHour: any = null;
+        let updateScheduleInMinutes: any = null;
+
+        let endTimeInHour: any = this.schedule[0].programs.endTimeInHour;
+        let endTimeInMinues: any = this.schedule[0].programs.endTimeInMinutes;
+
+        let currentTimeInHour: any = moment().utc().format('H');
+        let currentTimeInMinutes: any = moment().utc().format('m');
+
+
+        updateScheduleInHour = (endTimeInHour - currentTimeInHour) * 60 * 60000; // hours to milliseconds
+        updateScheduleInMinutes = (endTimeInMinues - currentTimeInMinutes) * 60000; // minutes to milliseconds
+
+        setTimeout(() => {
+            this.getSchedule();
+        }, updateScheduleInHour + updateScheduleInMinutes);
+
 
     }
 
 
-    getSchedule(): Promise<Response> {
+    getSchedule(): void {
 
         let url: string = Config.WS_URL + this.regService.getResourceUrl(); +"/schedule";
-        return this.http.get(url)
+        this.http.get(url)
             .toPromise()
             .then(response => {
-                return response.json();
+                this.schedule = response.json();
+                this.checkEndOfSchedule();
             })
             .catch(this.handleError);
+        // this.addListener(this.schedule);
+
     }
 
     private handleError(error: any): Promise<any> {

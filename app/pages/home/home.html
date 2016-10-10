@@ -32,15 +32,15 @@
                 <ion-icon name="play"></ion-icon>
             </button>
                 <ion-item>
-                    <h1 primary>Vanakkam Thamizha</h1>
+                    <h1 primary>{{ program.name }}</h1>
                     <h2 padding-top>Hosted By: </h2>
                 </ion-item>
                 <ion-item>
                     <ion-avatar item-left large>
-                        <img src="img/person.jpg">
+                        <img src="{{ program.artistImgUrl }}">
                     </ion-avatar>
                     <div>
-                        <p text-capitalize>RJ kaushik (mottai)</p>
+                        <p text-capitalize>{{ program.hostedBy }}</p>
                         <p style="font-style: italic;font-weight: bold;">"I'm not bad, just evil."</p>
                     </div>
                 </ion-item>

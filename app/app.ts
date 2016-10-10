@@ -2,19 +2,18 @@ import {Component, ViewChild} from '@angular/core';
 import {ionicBootstrap, Platform, Nav} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {Login} from './pages/login/login';
-import {Home} from './pages/home/home';
-import {HomeWrapper} from './pages/home-wrapper/home-wrapper';
-import {RegistrationService} from './service/registration';
+import {RegistrationService} from './service/registration'
+import {WebSocketService} from './service/websocket'
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [RegistrationService]
+  providers: [RegistrationService,WebSocketService]
 })
 class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   // make Login the root (or first) page
-  rootPage: any = HomeWrapper;
+  rootPage: any = Login;
 
   constructor(
     public platform: Platform) {
@@ -30,6 +29,4 @@ class MyApp {
   }
 }
 
-ionicBootstrap(MyApp,null,{
-    mode: 'md'
-  });
+ionicBootstrap(MyApp);
