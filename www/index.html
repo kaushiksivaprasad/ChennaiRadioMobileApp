@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Ionic</title>
   <meta charset="UTF-8">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Content-Security-Policy" content="default-src * http://localhost:8080 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+  <meta http-equiv="Content-Security-Policy" content="default-src * http://99270bd1.ngrok.io/rest 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval';media-src *;">
 
 
   <link rel="manifest" href="manifest.json">
@@ -17,11 +19,15 @@
         .catch(err => console.log('Error', err));
     }
   </script>-->
+  <style>
+    <item name="android:windowTranslucentStatus">true</item>
+  </style>
 
   <link ios-href="build/css/app.ios.css" rel="stylesheet">
   <link md-href="build/css/app.md.css" rel="stylesheet">
-  <link wp-href="build/css/app.wp.css" rel="stylesheet">  
+  <link wp-href="build/css/app.wp.css" rel="stylesheet">
 </head>
+
 <body class="md">
 
   <ion-app></ion-app>
@@ -36,4 +42,5 @@
   <!-- the bundle which is built from the app's source code -->
   <script src="build/js/app.bundle.js"></script>
 </body>
+
 </html>

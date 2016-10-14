@@ -1,19 +1,34 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {RegistrationService} from '../../service/registration';
-import { AlertController, NavController, ToastController, Toast} from 'ionic-angular';
+import { AlertController, NavController, ToastController, Toast, Content, Platform} from 'ionic-angular';
 import Utils from '../../utils/utils';
 import {User} from '../../models/user';
-import Config from '../../utils/system-config'
+import Config from '../../utils/system-config';
+
+declare var cordova: any;
 
 @Component({
   templateUrl: 'build/pages/signup/signup.html'
 })
 export class SignupPage {
+  @ViewChild(Content) content: Content;
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
-    public regService: RegistrationService) {
+    public regService: RegistrationService,
+    private platform: Platform) {
+    // window.addEventListener('native.keyboardshow', (e: any) => {
+    //   let deviceHeight = this.platform.height();
+    //   let keyboardHeight = e.keyboardHeight;
+    //   let deviceHeightAdjusted = deviceHeight - keyboardHeight;
+    //   deviceHeightAdjusted = deviceHeightAdjusted < 0 ? (deviceHeightAdjusted * -1) : deviceHeightAdjusted;
+    //   document.getElementById('contentDiv').style.height = deviceHeightAdjusted + 'px';
+    // });
+
+    // window.addEventListener('native.keyboardhide', (e) => {
+    //   document.getElementById('contentDiv').style.height = '100%';
+    // });
   }
   toast: Toast = null;
   register(emailId, password, firstName, lastName, phoneNo) {
@@ -67,6 +82,17 @@ export class SignupPage {
     });
     alert.present();
   }
+
+  // onFocus(event: any) {
+  //   cordova.plugins.Keyboard.show();
+  //   let top = event.target.getBoundingClientRect().top;
+  //   let left = event.target.getBoundingClientRect().left;
+  //   this.content.scrollTo(left, top);
+  //   // console.log('Platform content height -> ' + this.platform.height);
+  //   // console.log('scroll top -> ' + top);
+  // }
+
+
 
   // ionViewWillLeave() {
   //   if (this.toast) {

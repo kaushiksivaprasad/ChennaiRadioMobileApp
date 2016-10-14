@@ -6,16 +6,17 @@ import * as moment from 'moment';
 
 @Injectable()
 export class ScheduleService {
+    public schedules = null;
     private timeout = null;
     public resourceUrl: String = null;
     public scheduleRecieveEvent = new EventEmitter<any>();
     constructor(public http: Http) {
     }
-    triggerFetchAtEndofSchedule(schedules): void {
+    triggerFetchAtEndofSchedule(): void {
         // All time is converted to GMT
-        if (schedules[0] && schedules[0].programs[0]) {
-            let endTimeInHour: number = + schedules[0].programs[0].endTimeInHour;
-            let endTimeInMinues: number = + schedules[0].programs[0].endTimeInMinutes;
+        if (this.schedules[0] && this.schedules[0].programs[0]) {
+            let endTimeInHour: number = + this.schedules[0].programs[0].endTimeInHour;
+            let endTimeInMinues: number = + this.schedules[0].programs[0].endTimeInMinutes;
 
             let currentTime = moment().utc().valueOf();
             let futureTime = moment().utc().hours(endTimeInHour).minutes(endTimeInMinues).valueOf();
@@ -25,7 +26,6 @@ export class ScheduleService {
                 clearTimeout(this.timeout);
                 this.getSchedule();
             }, diffTime);
-            this.scheduleRecieveEvent.emit(schedules);
         }
     }
 
@@ -37,8 +37,12 @@ export class ScheduleService {
                 .toPromise()
                 .then(response => {
                     let schedules = response.json();
-                    console.log('ScheduleService -> scheduleObtained'+JSON.stringify(schedules));
-                    this.triggerFetchAtEndofSchedule(schedules);
+                    if (schedules && schedules.length > 0) {
+                        this.schedules = response.json();
+                        console.log('ScheduleService -> scheduleObtained' + JSON.stringify(this.schedules));
+                        this.triggerFetchAtEndofSchedule();
+                        this.scheduleRecieveEvent.emit(this.schedules);
+                    }
                 })
                 .catch(this.handleError);
         }

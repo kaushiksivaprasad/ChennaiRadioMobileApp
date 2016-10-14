@@ -6,11 +6,12 @@ import {HomeWrapper} from './pages/home-wrapper/home-wrapper';
 import {RegistrationService} from './service/registration';
 import {WebSocketService} from './service/websocket';
 import {ScheduleService} from './service/schedule';
+import {EventBus} from './service/eventbus';
 // import WebSocketService from './service/websocket';
 
 @Component({
   templateUrl: 'build/app.html',
-  providers: [RegistrationService, WebSocketService, ScheduleService]
+  providers: [RegistrationService, WebSocketService, ScheduleService, EventBus]
 })
 class MyApp {
   @ViewChild(Nav) nav: Nav;

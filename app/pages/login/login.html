@@ -1,16 +1,16 @@
 <ion-content padding class="login">
-  <div id="contentDiv">
+  <div id="contentDiv" *ngIf="showLogin">
     <img id="logo" src="img/compressed_logo.png">
-    <ion-item>
-      <ion-label floating>Username</ion-label>
-      <ion-input type="text" #emailId></ion-input>
+    <ion-item class="email">
+      <ion-label floating>Email Id</ion-label>
+      <ion-input type="text" #email [value]="emailId"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Password</ion-label>
-      <ion-input type="password" #password></ion-input>
+      <ion-input type="password" #pass [value]="password"></ion-input>
     </ion-item>
-    <button id="login" (click)="onLogin(emailId.value,password.value)">Login</button>
+    <button id="login" (click)="onLogin(email.value,pass.value)">Login</button>
     <div id="signUpDiv" text-center>
       <p>or</p>
       <a href="javascript:void(0)" (click)="onSignUp()">Sign Up</a>

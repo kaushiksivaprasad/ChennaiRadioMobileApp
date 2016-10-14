@@ -1,13 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import Config from '../../utils/system-config'
-import Utils from '../../utils/utils';
-
+import {Component} from '@angular/core';
+import {WebSocketService} from '../../service/websocket';
+import {ScheduleService} from '../../service/schedule';
+import {DomSanitizationService} from '@angular/platform-browser';
+import {Platform} from 'ionic-angular';
+import {EventBus} from '../../service/eventbus';
 
 @Component({
     templateUrl: 'build/pages/home/home.html'
 })
-export class Home extends OnInit {
-    private imgList: Array<any>;
+export class Home {
+    private isStopped = true;
+    private imgUrl: Array<any> = [];
+    private adHeight;
+    private cardImgHeight;
     program = {
         name: null,
         hostedBy: null,
@@ -18,37 +23,69 @@ export class Home extends OnInit {
         loop: true,
         pager: true
     };
-    private ws = null;
 
-    // constructor(private regService: RegistrationService, private wsService: WebSocketService, private sdService: ScheduleService) {
-    //     super();
-    //     this.wsService.subscribe(evt => {
-    //         for (let mess of evt.mess) {
-    //             this.imgList.push(mess.bufferUrl);
-    //         }
-    //     });
-    // }
+    constructor(private wsService: WebSocketService,
+        private scheduleService: ScheduleService,
+        private sanitizer: DomSanitizationService,
+        private platform: Platform,
+        private eventBus: EventBus) {
+        // this.wsService.adEvent.subscribe();  
+        this.adHeight = sanitizer.bypassSecurityTrustStyle('height : ' + (platform.height() * .33) + 'px');
+        this.cardImgHeight = sanitizer.bypassSecurityTrustStyle('height : ' + (platform.height() * .25) + 'px');
 
-    ngOnInit() {
-        //called after the constructor and called  after the first ngOnChanges() 
-        // this.wsService.addListener(this);
-        // this.sdService.addListener(this);
+        this.wsService.adEvent.subscribe(evt => {
+            if (evt.mess) {
+                if (evt.mess.length > this.imgUrl.length) {
+                    this.processAndSetImageUrls(evt.mess);
+                } else {
+                    let newItemsFound = false;
+                    for (let i = 0; i < evt.mess.length; i++) {
+                        if (this.imgUrl[i] !== this.sanitizer.bypassSecurityTrustUrl(evt.mess.bufferUrl)) {
+                            newItemsFound = true;
+                            break;
+                        }
+                    }
+                    if (newItemsFound) {
+                        this.processAndSetImageUrls(evt.mess);
+                    }
+                }
+
+            }
+        });
+        this.scheduleService.scheduleRecieveEvent.subscribe(schedules => {
+            this.program = {
+                name: null,
+                hostedBy: null,
+                artistImgUrl: null
+            };
+            if (schedules[0].programs && schedules[0].programs.length > 0) {
+                this.program.name = schedules[0].programs[0].programName;
+                this.program.hostedBy = schedules[0].programs[0].hostedBy;
+                let artistImgUrl = this.sanitizer.bypassSecurityTrustUrl(
+                    this.scheduleService.resourceUrl.substring(0, this.scheduleService.resourceUrl.length - 1)
+                    + schedules[0].programs[0].artistImgUrl);
+                this.program.artistImgUrl = artistImgUrl;
+            }
+        });
+        this.wsService.initiateWebSocket();
+        this.scheduleService.getSchedule();
     }
 
-    // onScheduleRecieved(schedule: any): void {
-    //     if ((schedule.length && schedule[0].programs.length) != undefined) {
-    //         this.program.name = schedule[0].programs[0].programName;
-    //         this.program.hostedBy = schedule[0].programs[0].hostedBy;
-    //         this.program.artistImgUrl = Config.WS_URL + Config.USER_TYPE_RJ + schedule[0].programs[0].artistImgUrl;
+    onclick(event: any) {
+        if (event.target.id === 'play') {
+            this.isStopped = false;
+            this.eventBus.triggerStreamActionEvent(true);
+        } else {
+            this.isStopped = true;
+            this.eventBus.triggerStreamActionEvent(false);
+        }
+    }
 
-    //     }
-    // }
-
-    // // onEventRecieved(event: any): void {
-    // //     for (let img of event[0].mess) {
-    // //         this.imgList.push(img.bufferUrl)
-    // //     }
-    // // }
-
-
+    processAndSetImageUrls(messages) {
+        let messArray = [];
+        for (let mess of messages) {
+            messArray.push(this.sanitizer.bypassSecurityTrustUrl(mess.bufferUrl));
+        }
+        this.imgUrl = messArray;
+    }
 }

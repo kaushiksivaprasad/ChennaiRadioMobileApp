@@ -7,14 +7,18 @@ export class WebSocketService {
     private ws: WebSocket = null;
     public resourceUrl: String = null;
     public adEvent = new EventEmitter<{ mess: Array<any> }>();
+    public eventData = null;
+
     constructor( @Inject(Platform) public platform: Platform) {
         this.platform.pause.subscribe(evt => {
+            console.log('WebSocketService -> pause event');
             if (this.ws) {
                 this.ws.close();
                 this.ws = null;
             }
         });
         this.platform.resume.subscribe(evt => {
+            console.log('WebSocketService -> resume event');
             if (!this.ws) {
                 this.initiateWebSocket();
             }
@@ -33,17 +37,18 @@ export class WebSocketService {
 
             this.ws = new WebSocket(url + Config.WS_RESOURCE);
 
-            this.ws.onopen = function() {
+            this.ws.onopen = function () {
                 console.log('WebSocketService -> open');
             };
             this.ws.onmessage = (evt: MessageEvent) => {
                 var evtMess = evt.data;
-                this.adEvent.emit(JSON.parse(evtMess));
+                this.eventData = JSON.parse(evtMess);
+                this.adEvent.emit(this.eventData);
                 console.log('WebSocketService -> event recieved' + evtMess);
                 // this.triggerListener(event);
             };
 
-            this.ws.onclose = function() {
+            this.ws.onclose = function () {
                 this.ws = null;
                 console.log('WebSocketService -> Connection is closed...');
             };
