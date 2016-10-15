@@ -36,14 +36,14 @@ export class Login {
             this.emailId = loginInfo.email;
             this.password = loginInfo.password;
             this.loaderInstance = this.loadingController.create({
-              content: 'Please wait...'
+              content: 'Logging in...'
             });
             this.loaderInstance.present();
             this.onLogin(loginInfo.email, loginInfo.password);
           } else {
             this.showLogin = true;
             if (this.loaderInstance) {
-              this.loaderInstance.dismissAll();
+              this.loaderInstance.dismiss();
             }
           }
         });

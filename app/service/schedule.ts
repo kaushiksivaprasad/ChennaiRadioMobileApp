@@ -21,6 +21,10 @@ export class ScheduleService {
             let currentTime = moment().utc().valueOf();
             let futureTime = moment().utc().hours(endTimeInHour).minutes(endTimeInMinues).valueOf();
             let diffTime = futureTime - currentTime;
+            if (diffTime === 0) {
+                // give one minute delay before fetching again
+                diffTime = 1000 * 60;
+            }
 
             this.timeout = setTimeout(() => {
                 clearTimeout(this.timeout);
