@@ -27,7 +27,7 @@ export class Login {
   ) {
     console.log('Login -> constructor');
     this.loaderInstance = null;
-    if (cordova) {
+    if (typeof cordova !== 'undefined' && cordova) {
       cordova.plugins.SecureLocalStorage.
         getItem(Config.LOGIN_INFO_STORAGE_KEY).then((loginInfo) => {
           if (loginInfo) {
@@ -47,6 +47,8 @@ export class Login {
             }
           }
         });
+    } else {
+      this.showLogin = true;
     }
   }
   onLogin(emailId: string, password: string) {
@@ -104,8 +106,9 @@ export class Login {
   }
 
   setToLocalStorage(info: { email: string, password: string }) {
-    cordova.plugins.SecureLocalStorage.setItem(Config.LOGIN_INFO_STORAGE_KEY, JSON.stringify(info));
-    // cordova.plugins.SecureLocalStorage.setItem(Config.RESOURCE_URL, info.resourceURL);
+    if (typeof cordova !== 'undefined' && cordova) {
+      cordova.plugins.SecureLocalStorage.setItem(Config.LOGIN_INFO_STORAGE_KEY, JSON.stringify(info));
+    }
   }
 
 }
