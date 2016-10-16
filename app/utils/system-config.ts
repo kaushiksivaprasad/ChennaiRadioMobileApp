@@ -1,12 +1,12 @@
 class Config {
     // WS_URL: string = 'http://ed0180c0.ngrok.io/rest/';
-    WS_URL: string = 'http://52.87.160.13/rest/';
-    
+    WS_URL: string = 'http://api.chennairadio.ca/rest/';
     LOGIN_RESOURCE: string = 'login';
     USER_TYPE_RJ = 'RJ';
     USER_TYPE_ADMIN = 'Admin';
     USER_TYPE_CUSTOMER = 'User';
     PASSWORD_LEN = 3;
+    PHONE_NO_LEN = 10;
     SIGNUP_RESOURCE: string = 'signup';
     WS_RESOURCE = 'ws';
     SCHEDULE_RESOURCE = 'schedule';

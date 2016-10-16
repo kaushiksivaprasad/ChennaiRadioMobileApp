@@ -31,7 +31,7 @@ export class Home {
         private eventBus: EventBus) {
         // this.wsService.adEvent.subscribe();  
         this.adHeight = sanitizer.bypassSecurityTrustStyle('height : ' + (platform.height() * .33) + 'px');
-        this.cardImgHeight = sanitizer.bypassSecurityTrustStyle('height : ' + (platform.height() * .25) + 'px');
+        this.cardImgHeight = sanitizer.bypassSecurityTrustStyle('height : ' + (platform.height() * .28) + 'px');
 
         this.wsService.adEvent.subscribe(evt => {
             if (evt.mess) {

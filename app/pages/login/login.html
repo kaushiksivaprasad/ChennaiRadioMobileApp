@@ -1,5 +1,5 @@
-<ion-content padding class="login" *ngIf="showLogin" style="background-image : url('img/bg-min_latest.jpg'); background-size: 100% 100%;">
-  <div id="contentDiv" >
+<ion-content padding class="login" *ngIf="showLogin" [style]="bgImgStyle">
+  <div id="contentDiv">
     <img id="logo" src="img/compressed_logo.png" style="margin-bottom:15px;">
     <ion-item class="email">
       <ion-label floating>Email Id</ion-label>

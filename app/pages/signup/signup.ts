@@ -4,6 +4,7 @@ import { AlertController, NavController, ToastController, Toast, Content, Platfo
 import Utils from '../../utils/utils';
 import {User} from '../../models/user';
 import Config from '../../utils/system-config';
+import {DomSanitizationService} from '@angular/platform-browser';
 
 declare var cordova: any;
 
@@ -12,25 +13,20 @@ declare var cordova: any;
 })
 export class SignupPage {
   @ViewChild(Content) content: Content;
+  bgImgStyle = null;
+  toast: Toast = null;
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
     public regService: RegistrationService,
-    private platform: Platform) {
-    // window.addEventListener('native.keyboardshow', (e: any) => {
-    //   let deviceHeight = this.platform.height();
-    //   let keyboardHeight = e.keyboardHeight;
-    //   let deviceHeightAdjusted = deviceHeight - keyboardHeight;
-    //   deviceHeightAdjusted = deviceHeightAdjusted < 0 ? (deviceHeightAdjusted * -1) : deviceHeightAdjusted;
-    //   document.getElementById('contentDiv').style.height = deviceHeightAdjusted + 'px';
-    // });
-
-    // window.addEventListener('native.keyboardhide', (e) => {
-    //   document.getElementById('contentDiv').style.height = '100%';
-    // });
+    private platform: Platform,
+    private sanitizer: DomSanitizationService
+  ) {
+    this.bgImgStyle = this.sanitizer.bypassSecurityTrustStyle("background-image : url('img/bg_min.jpg');" +
+      "background-size:" + platform.width() + "px " + platform.height() + "px");
   }
-  toast: Toast = null;
+
   register(emailId, password, firstName, lastName, phoneNo) {
     if (!Utils.isValidString(emailId) ||
       !Utils.isValidString(password) ||
@@ -43,10 +39,10 @@ export class SignupPage {
     } else if (!Utils.isValidPassword(password)) {
       this.showAlert('Password length needs to be atleast 6');
     } else if (!Utils.isValidPhoneNo(phoneNo)) {
-      this.showAlert('Please enter the phoneNo in the specified format');
+      this.showAlert('Please enter a valid phoneNo in the specified format');
     } else {
       let user = new User();
-      user.emailId = Utils.preProcessString(emailId);
+      user.emailId = Utils.preProcessString(emailId).toLowerCase();
       user.password = Utils.preProcessString(password);
       user.firstName = Utils.preProcessString(firstName);
       user.lastName = Utils.preProcessString(lastName);

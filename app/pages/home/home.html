@@ -1,6 +1,6 @@
 <ion-content>
     <div>
-        <div *ngIf="!imgUrl || imgUrl.length == 0" [style]="adHeight">
+        <!--<div *ngIf="!imgUrl || imgUrl.length == 0" [style]="adHeight">
             <ion-slides *ngIf="!imgUrl || imgUrl.length == 0" [options]="homeSliderOptions">
                 <ion-slide>
                     <img src="img/slide_img1.jpg" />
@@ -12,7 +12,7 @@
                     <img src="img/slide_img3.jpg" />
                 </ion-slide>
             </ion-slides>
-        </div>
+        </div>-->
         <div *ngIf="imgUrl && imgUrl.length>0" [style]="adHeight">
             <ion-slides [options]="homeSliderOptions">
                 <ion-slide *ngFor="let img of imgUrl">

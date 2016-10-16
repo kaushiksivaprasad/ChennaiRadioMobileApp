@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
+import {DomSanitizationService} from '@angular/platform-browser';
 import {RegistrationService} from '../../service/registration';
 import {WebSocketService} from '../../service/websocket';
-import { AlertController, NavController, LoadingController} from 'ionic-angular';
+import { AlertController, NavController, LoadingController, Platform} from 'ionic-angular';
 import {SignupPage} from '../signup/signup';
 import Utils from '../../utils/utils';
 import {ScheduleService} from '../../service/schedule';
@@ -18,13 +19,18 @@ export class Login {
   emailId = '';
   password = '';
   loaderInstance = null;
+  bgImgStyle = null;
   constructor(private alertCtrl: AlertController,
     private navCtrl: NavController,
     private regService: RegistrationService,
     private wsService: WebSocketService, private scheduleService: ScheduleService,
     private eventBus: EventBus,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private platform: Platform,
+    private sanitizer: DomSanitizationService
   ) {
+    this.bgImgStyle = sanitizer.bypassSecurityTrustStyle("background-image : url('img/bg_min.jpg');" +
+      "background-size:" + platform.width() + "px " + platform.height() + "px");
     console.log('Login -> constructor');
     this.loaderInstance = null;
     if (typeof cordova !== 'undefined' && cordova) {

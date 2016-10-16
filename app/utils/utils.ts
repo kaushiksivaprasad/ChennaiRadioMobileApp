@@ -36,14 +36,8 @@ class Utils {
     isValidPhoneNo(x: string) {
         if (this.isValidString(x)) {
             x = x.trim();
-            if (x.length >= Config.PASSWORD_LEN) {
-                let indx = x.indexOf('-');
-                if (indx !== -1) {
-                    let result = x.length - (indx + 1);
-                    if (result === 10) {
-                        return true;
-                    }
-                }
+            if (x.length === Config.PHONE_NO_LEN) {
+                return !isNaN(parseInt(x, 10));
             }
         }
         return false;
