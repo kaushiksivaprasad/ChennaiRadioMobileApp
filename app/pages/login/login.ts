@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
-import {DomSanitizationService} from '@angular/platform-browser';
-import {RegistrationService} from '../../service/registration';
-import {WebSocketService} from '../../service/websocket';
-import { AlertController, NavController, LoadingController, Platform} from 'ionic-angular';
-import {SignupPage} from '../signup/signup';
+import { Component } from '@angular/core';
+import { DomSanitizationService } from '@angular/platform-browser';
+import { RegistrationService } from '../../service/registration';
+import { WebSocketService } from '../../service/websocket';
+import { AlertController, NavController, LoadingController, Platform } from 'ionic-angular';
+import { SignupPage } from '../signup/signup';
 import Utils from '../../utils/utils';
-import {ScheduleService} from '../../service/schedule';
-import {HomeWrapper} from '../home-wrapper/home-wrapper';
-import {EventBus} from '../../service/eventbus';
+import { ScheduleService } from '../../service/schedule';
+import { HomeWrapper } from '../home-wrapper/home-wrapper';
+import { EventBus } from '../../service/eventbus';
 import Config from '../../utils/system-config';
 
 declare var cordova: any;
@@ -33,6 +33,12 @@ export class Login {
       "background-size:" + platform.width() + "px " + platform.height() + "px");
     console.log('Login -> constructor');
     this.loaderInstance = null;
+    //listen for event from signup
+    this.eventBus.signupSuccessfulEvent.subscribe(usrDetails => {
+      this.emailId = usrDetails.emailId;
+      this.password = usrDetails.password;
+    })
+    //check if cordova exists and fetch if info is stored in local cache
     if (typeof cordova !== 'undefined' && cordova) {
       cordova.plugins.SecureLocalStorage.
         getItem(Config.LOGIN_INFO_STORAGE_KEY).then((loginInfo) => {
@@ -79,6 +85,7 @@ export class Login {
         if (element) {
           element.disabled = false;
         }
+        //initialize the urls of all the services
         this.wsService.resourceUrl = json.url;
         this.scheduleService.resourceUrl = json.url;
         this.eventBus.resourceUrl = json.url;
@@ -94,6 +101,7 @@ export class Login {
         if (this.loaderInstance) {
           this.loaderInstance.dismiss();
         }
+        this.showLogin = true;
       });
     }
   }

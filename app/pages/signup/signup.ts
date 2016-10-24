@@ -1,10 +1,11 @@
-import {Component, ViewChild} from '@angular/core';
-import {RegistrationService} from '../../service/registration';
-import { AlertController, NavController, ToastController, Toast, Content, Platform} from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { RegistrationService } from '../../service/registration';
+import { EventBus } from '../../service/eventbus';
+import { AlertController, NavController, ToastController, Toast, Content, Platform } from 'ionic-angular';
 import Utils from '../../utils/utils';
-import {User} from '../../models/user';
+import { User } from '../../models/user';
 import Config from '../../utils/system-config';
-import {DomSanitizationService} from '@angular/platform-browser';
+import { DomSanitizationService } from '@angular/platform-browser';
 
 declare var cordova: any;
 
@@ -21,7 +22,8 @@ export class SignupPage {
     private toastCtrl: ToastController,
     public regService: RegistrationService,
     private platform: Platform,
-    private sanitizer: DomSanitizationService
+    private sanitizer: DomSanitizationService,
+    private eventBus: EventBus
   ) {
     this.bgImgStyle = this.sanitizer.bypassSecurityTrustStyle("background-image : url('img/bg_min.jpg');" +
       "background-size:" + platform.width() + "px " + platform.height() + "px");
@@ -60,6 +62,11 @@ export class SignupPage {
           console.log('toast on dismiss');
           this.navCtrl.remove(this.navCtrl.length() - 1).then(() => {
             this.navCtrl.pop();
+            let userEvent = {
+              emailId: user.emailId,
+              password: user.password
+            }
+            this.eventBus.triggerSignupSuccessfulEvent(userEvent);
           });
         });
         this.toast.present();
@@ -72,28 +79,10 @@ export class SignupPage {
   }
   private showAlert(subTitle) {
     let alert = this.alertCtrl.create({
-      title: 'Login',
+      title: 'Signup',
       subTitle: subTitle,
       buttons: ['OK']
     });
     alert.present();
   }
-
-  // onFocus(event: any) {
-  //   cordova.plugins.Keyboard.show();
-  //   let top = event.target.getBoundingClientRect().top;
-  //   let left = event.target.getBoundingClientRect().left;
-  //   this.content.scrollTo(left, top);
-  //   // console.log('Platform content height -> ' + this.platform.height);
-  //   // console.log('scroll top -> ' + top);
-  // }
-
-
-
-  // ionViewWillLeave() {
-  //   if (this.toast) {
-  //     this.toast.onDidDismiss = null;
-  //     this.toast.dismiss();
-  //   }
-  // }
 }

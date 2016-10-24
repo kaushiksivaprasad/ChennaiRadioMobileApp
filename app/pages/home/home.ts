@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {WebSocketService} from '../../service/websocket';
-import {ScheduleService} from '../../service/schedule';
-import {DomSanitizationService} from '@angular/platform-browser';
-import {Platform} from 'ionic-angular';
-import {EventBus} from '../../service/eventbus';
+import { Component } from '@angular/core';
+import { WebSocketService } from '../../service/websocket';
+import { ScheduleService } from '../../service/schedule';
+import { DomSanitizationService } from '@angular/platform-browser';
+import { Platform } from 'ionic-angular';
+import { EventBus } from '../../service/eventbus';
+import Utils from '../../utils/utils';
 
 @Component({
     templateUrl: 'build/pages/home/home.html'
@@ -13,6 +14,7 @@ export class Home {
     private imgUrl: Array<any> = [];
     private adHeight;
     private cardImgHeight;
+
     program = {
         name: null,
         hostedBy: null,
@@ -40,7 +42,7 @@ export class Home {
                 } else {
                     let newItemsFound = false;
                     for (let i = 0; i < evt.mess.length; i++) {
-                        if (this.imgUrl[i] !== this.sanitizer.bypassSecurityTrustUrl(evt.mess.bufferUrl)) {
+                        if (this.imgUrl[i] != this.sanitizer.bypassSecurityTrustUrl(evt.mess[i].bufferUrl)) {
                             newItemsFound = true;
                             break;
                         }
@@ -53,18 +55,27 @@ export class Home {
             }
         });
         this.scheduleService.scheduleRecieveEvent.subscribe(schedules => {
-            this.program = {
-                name: null,
-                hostedBy: null,
-                artistImgUrl: null
-            };
-            if (schedules[0].programs && schedules[0].programs.length > 0) {
-                this.program.name = schedules[0].programs[0].programName;
-                this.program.hostedBy = schedules[0].programs[0].hostedBy;
-                let artistImgUrl = this.sanitizer.bypassSecurityTrustUrl(
+            let program = Utils.extractFirstProgramFromSchedule(schedules);
+            if (program) {
+                this.program = {
+                    name: null,
+                    hostedBy: null,
+                    artistImgUrl: null
+                };
+                program.artistImgUrl = this.sanitizer.bypassSecurityTrustUrl(
                     this.scheduleService.resourceUrl.substring(0, this.scheduleService.resourceUrl.length - 1)
-                    + schedules[0].programs[0].artistImgUrl);
-                this.program.artistImgUrl = artistImgUrl;
+                    + program.artistImgUrl);
+                this.program = program;
+            }
+        });
+
+        this.eventBus.streamActionEvent.subscribe(event => {
+            if (event.src !== this.THIS_CLASS) {
+                if (event.isPlaying) {
+                    this.isStopped = false;
+                } else {
+                    this.isStopped = true;
+                }
             }
         });
         this.wsService.initiateWebSocket();
@@ -72,12 +83,18 @@ export class Home {
     }
 
     onclick(event: any) {
+        let emittedEvent = {
+            src: this.THIS_CLASS,
+            isPlaying: null
+        };
         if (event.target.id === 'play') {
             this.isStopped = false;
-            this.eventBus.triggerStreamActionEvent(true);
+            emittedEvent.isPlaying = true;
+            this.eventBus.triggerStreamActionEvent(emittedEvent);
         } else {
             this.isStopped = true;
-            this.eventBus.triggerStreamActionEvent(false);
+            emittedEvent.isPlaying = false;
+            this.eventBus.triggerStreamActionEvent(emittedEvent);
         }
     }
 
@@ -86,6 +103,11 @@ export class Home {
         for (let mess of messages) {
             messArray.push(this.sanitizer.bypassSecurityTrustUrl(mess.bufferUrl));
         }
+        this.imgUrl = null;
         this.imgUrl = messArray;
+    }
+
+    get THIS_CLASS() {
+        return 'HOME';
     }
 }

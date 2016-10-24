@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 import Utils from '../../utils/utils';
-import {ScheduleService} from '../../service/schedule';
-import {DomSanitizationService} from '@angular/platform-browser';
+import { ScheduleService } from '../../service/schedule';
+import { DomSanitizationService } from '@angular/platform-browser';
 import * as moment from 'moment';
 
 @Component({
@@ -29,21 +29,36 @@ export class Schedules {
 
     setSchedule(schedules) {
         let imgcount = 0;
+        let today = 0;
         for (var sh = 0; sh < schedules.length; sh++) {
+            let dayToSet = schedules[sh].dayPlayed;
+            if (sh === 0) {
+                today = dayToSet;
+            } else {
+                if (dayToSet < today) {
+                    dayToSet = today + 1;
+                }
+            }
             for (var sp = 0; sp < schedules[sh].programs.length; sp++) {
                 let program = schedules[sh].programs[sp];
-                let startTime = moment().utc().hours(program.startTimeInHour).
-                    minutes(program.startTimeInMinutes).local().format('h:mm a');
-                let endTime = moment().utc().hours(program.endTimeInHour).
-                    minutes(program.endTimeInMinutes).local().format('h:mm a');
+                let dayOfTheWeek = 'Tomorrow';
+                let startTime = moment().utc().day(dayToSet).hours(program.startTimeInHour).
+                    minutes(program.startTimeInMinutes).local();
+                let endTime = moment().utc().day(dayToSet).hours(program.endTimeInHour).
+                    minutes(program.endTimeInMinutes).local();
                 if (imgcount === this.imgUrl.length) {
                     imgcount = 0;
+                }
+                if (startTime.format('d') === moment().format('d')) {
+                    // we are iterating the programs of the current day
+                    dayOfTheWeek = 'Today';
                 }
                 let temp = {
                     name: program.programName,
                     hostedBy: program.hostedBy,
                     programImg: this.sanitizer.bypassSecurityTrustUrl(this.imgUrl[imgcount]),
-                    time: startTime + ' - ' + endTime
+                    time: startTime.format('h:mm a') + ' - ' + endTime.format('h:mm a'),
+                    day: dayOfTheWeek
                 };
                 this.programs.push(temp);
                 imgcount++;

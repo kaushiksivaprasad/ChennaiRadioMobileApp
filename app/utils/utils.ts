@@ -43,6 +43,24 @@ class Utils {
         return false;
     }
 
+    extractFirstProgramFromSchedule(schedules): {
+        name: string,
+        hostedBy: string,
+        artistImgUrl: any
+    } {
+        let program = {
+            name: null,
+            hostedBy: null,
+            artistImgUrl: null
+        };
+        if (schedules[0].programs && schedules[0].programs.length > 0) {
+            program.name = schedules[0].programs[0].programName;
+            program.hostedBy = schedules[0].programs[0].hostedBy;
+            program.artistImgUrl = schedules[0].programs[0].artistImgUrl;
+            return program;
+        }
+        return null;
+    }
 
 }
 let utilsObj = new Utils();

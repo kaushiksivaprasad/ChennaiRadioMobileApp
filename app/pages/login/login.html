@@ -1,16 +1,21 @@
 <ion-content padding class="login" *ngIf="showLogin" [style]="bgImgStyle">
-  <div id="contentDiv">
-    <img id="logo" src="img/compressed_logo.png" style="margin-bottom:15px;">
-    <ion-item class="email">
-      <ion-label floating>Email Id</ion-label>
-      <ion-input type="text" #email [value]="emailId"></ion-input>
-    </ion-item>
+	<div id="contentDiv">
+		<img id="logo" src="img/compressed_logo.png" style="margin-bottom:15px;">
+		<ion-item class="email">
+			<ion-label floating>Email Id</ion-label>
+			<ion-input type="text" #email [value]="emailId"></ion-input>
+		</ion-item>
 
-    <ion-item style="padding-bottom:2px;">
-      <ion-label floating>Password</ion-label>
-      <ion-input type="password" #pass [value]="password"></ion-input>
-    </ion-item>
-    <button id="login" (click)="onLogin(email.value,pass.value)">Login</button>
-    <button id="signup" (click)="onSignUp()" style="background-color: #c23442;">Sign Up</button>
-  </div>
+		<ion-item style="padding-bottom:2px;">
+			<ion-label floating>Password</ion-label>
+			<ion-input type="password" #pass [value]="password"></ion-input>
+		</ion-item>
+		<button id="login" (click)="onLogin(email.value,pass.value)">Login</button>
+		<button id="signup" (click)="onSignUp()" style="background-color: #c23442;">Sign Up</button>
+	</div>
 </ion-content>
+<!--<ion-content *ngIf="!showLogin" style="background-image : url('img/bg_min.jpg'); background-size: 100% 100%">
+	<div style="margin: 0 auto;">
+		<img src="img/compressed_logo.png" style="width: 75%!important; margin-top : 50%">
+	</div>
+</ion-content>-->
