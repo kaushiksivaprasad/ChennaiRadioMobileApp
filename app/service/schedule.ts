@@ -1,5 +1,5 @@
-import { Injectable, EventEmitter} from '@angular/core';
-import { Http} from '@angular/http';
+import { Injectable, EventEmitter } from '@angular/core';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import Config from '../utils/system-config';
 import * as moment from 'moment';
@@ -17,19 +17,25 @@ export class ScheduleService {
         if (this.schedules[0] && this.schedules[0].programs[0]) {
             let endTimeInHour: number = + this.schedules[0].programs[0].endTimeInHour;
             let endTimeInMinues: number = + this.schedules[0].programs[0].endTimeInMinutes;
-
-            let currentTime = moment().utc().valueOf();
-            let futureTime = moment().utc().hours(endTimeInHour).minutes(endTimeInMinues).valueOf();
-            let diffTime = futureTime - currentTime;
-            if (diffTime === 0) {
-                // give one minute delay before fetching again
-                diffTime = 1000 * 60;
+            let dayToSet = this.schedules[0].dayPlayed;
+            let currentDay = moment().utc().day();
+            if (currentDay > dayToSet) {
+                dayToSet = dayToSet + 1;
             }
+            let currentTime = moment().utc().valueOf();
+            let futureTime = moment().utc().day(dayToSet).hours(endTimeInHour).minutes(endTimeInMinues).valueOf();
+            let diffTime = futureTime - currentTime;
+            if (diffTime >= 0) {
+                if (diffTime === 0) {
+                    // give one minute delay before fetching again
+                    diffTime = 1000 * 60;
+                }
 
-            this.timeout = setTimeout(() => {
-                clearTimeout(this.timeout);
-                this.getSchedule();
-            }, diffTime);
+                this.timeout = setTimeout(() => {
+                    clearTimeout(this.timeout);
+                    this.getSchedule();
+                }, diffTime);
+            }
         }
     }
 

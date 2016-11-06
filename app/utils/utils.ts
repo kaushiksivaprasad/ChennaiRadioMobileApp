@@ -1,4 +1,5 @@
 import Config from './system-config';
+import * as moment from 'moment';
 class Utils {
     isValidString(x: string) {
         x = x.trim();
@@ -52,12 +53,25 @@ class Utils {
             name: null,
             hostedBy: null,
             artistImgUrl: null
-        };
+        }
         if (schedules[0].programs && schedules[0].programs.length > 0) {
-            program.name = schedules[0].programs[0].programName;
-            program.hostedBy = schedules[0].programs[0].hostedBy;
-            program.artistImgUrl = schedules[0].programs[0].artistImgUrl;
-            return program;
+            let dayToSet = schedules[0].dayPlayed;
+            let endTimeInHour: number = + schedules[0].programs[0].endTimeInHour;
+            let endTimeInMinues: number = + schedules[0].programs[0].endTimeInMinutes;
+            let startTimeInHour: number = + schedules[0].programs[0].startTimeInHour;
+            let startTimeInMinutes: number = + schedules[0].programs[0].startTimeInMinutes;
+            let startTime = moment().utc().day(dayToSet).hours(startTimeInHour).
+                minutes(startTimeInMinutes).valueOf();
+            let endTime = moment().utc().day(dayToSet).hours(endTimeInHour).
+                minutes(endTimeInMinues).valueOf();
+            let currentTime = moment().utc().valueOf();
+
+            if (startTime <= currentTime && endTime > currentTime) {
+                program.name = schedules[0].programs[0].programName;
+                program.hostedBy = schedules[0].programs[0].hostedBy;
+                program.artistImgUrl = schedules[0].programs[0].artistImgUrl;
+                return program;
+            }
         }
         return null;
     }

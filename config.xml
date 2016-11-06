@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.chennairadio.mobapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.chennairadio.mobapp" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Chennai Radio</name>
     <description>Chennai Radio Mobile Application</description>
     <author email="kaushik_sivaprasad@hotmail.com" href="http://chennairadio.ca">Chennai Radio Team</author>
@@ -41,7 +41,7 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
-    <preference name="SplashScreenDelay" value="2000" />
+    <preference name="SplashScreenDelay" value="4000" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="FadeSplashScreen" value="false" />
     <preference name="fullscreen" value="false" />
