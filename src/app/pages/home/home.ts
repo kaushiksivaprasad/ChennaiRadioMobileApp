@@ -71,6 +71,7 @@ export class Home {
 
         this.eventBus.streamActionEvent.subscribe(event => {
             if (event.src !== this.THIS_CLASS) {
+                console.log(`streamActionEvent obtained from ${event.src} and the value of isPlaying is ${event.isPlaying}`);
                 if (event.isPlaying) {
                     this.isStopped = false;
                 } else {

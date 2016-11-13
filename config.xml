@@ -63,4 +63,5 @@
     </plugin>
     <plugin name="cordova-plugin-file" spec="~4.3.0" />
     <plugin name="cordova-plugin-music-controls" spec="https://github.com/homerours/cordova-music-controls-plugin" />
+    <plugin name="com.rd11.remote-controls" spec="https://github.com/shi11/RemoteControls" />
 </widget>
