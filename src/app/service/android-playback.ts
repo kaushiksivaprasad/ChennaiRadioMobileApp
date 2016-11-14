@@ -65,8 +65,9 @@ export class AndroidPlayBackService extends AbstractBasePlayBack {
                             this.isPlaying = false;
                             console.log('AndroidPlayBackService -> music-controls-pause');
                             this.eventBus.streamActionEvent.emit(emittedEvent);
-                            this.stopAndReleaseMedia();
-                            break;
+                            return setTimeout(() => {
+                                this.stopAndReleaseMedia()
+                            }, 10);
                         case 'music-controls-play':
                             // Do something
                             this.loadMedia();
