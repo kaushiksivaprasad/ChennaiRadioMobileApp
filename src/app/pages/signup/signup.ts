@@ -25,7 +25,7 @@ export class SignupPage {
     private sanitizer: DomSanitizer,
     private eventBus: EventBus
   ) {
-    this.bgImgStyle = this.sanitizer.bypassSecurityTrustStyle("background-image : url('img/bg_min.jpg');" +
+    this.bgImgStyle = this.sanitizer.bypassSecurityTrustStyle("background-image : url('assets/img/bg_min.jpg');" +
       "background-size:" + platform.width() + "px " + platform.height() + "px");
   }
 
