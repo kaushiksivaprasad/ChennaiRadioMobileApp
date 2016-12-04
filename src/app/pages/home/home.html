@@ -1,6 +1,6 @@
 <ion-content>
     <div>
-        <div *ngIf="imgUrl && imgUrl.length>0" [style]="adHeight">
+        <div *ngIf="imgUrl && imgUrl.length>0" [style.height]="adHeight">
             <ion-slides [options]="homeSliderOptions">
                 <ion-slide *ngFor="let img of imgUrl">
                     <img [src]="img" />
@@ -13,7 +13,7 @@
         <div style="overflow-y: auto;">
             <ion-item>
                 <div>
-                    <div [style]="cardImgHeight">
+                    <div [style.height]="cardImgHeight">
                         <img src="assets/img/cover_art.jpg" style="height: 100% !important;">
                     </div>
                     <button large right ion-fab icon-only style="position:relative;margin-top:-18%;left:80%" (click)="onclick()">

@@ -64,6 +64,7 @@ export class AbstractBasePlayBack {
 
     protected stopAndReleaseMedia() {
         if (this.media) {
+            console.log('stopping stream');
             this.media.stop();
             this.media.release();
             this.media = null;

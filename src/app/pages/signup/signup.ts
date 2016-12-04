@@ -25,8 +25,6 @@ export class SignupPage {
     private sanitizer: DomSanitizer,
     private eventBus: EventBus
   ) {
-    this.bgImgStyle = this.sanitizer.bypassSecurityTrustStyle("background-image : url('assets/img/bg_min.jpg');" +
-      "background-size:" + platform.width() + "px " + platform.height() + "px");
   }
 
   register(emailId, password, firstName, lastName, phoneNo) {
@@ -84,5 +82,15 @@ export class SignupPage {
       buttons: ['OK']
     });
     alert.present();
+  }
+  
+  getBGImgStyle() {
+    let imgUrl = cordova.file.applicationDirectory + 'www/assets/img/bg_min.jpg'
+    let bgSize = this.platform.width() + "px " + this.platform.height() + "px";
+    let retJson = {
+      "background-image": 'url(' + imgUrl + ')',
+      "background-size": bgSize
+    };
+    return retJson;
   }
 }

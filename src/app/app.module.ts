@@ -10,7 +10,7 @@ import { IOSPlayBackService } from './service/ios-playback';
 import { Login } from './pages/login/login';
 import { HomeWrapper } from './pages/home-wrapper/home-wrapper';
 import { Schedules } from './pages/schedules/schedules';
-import { SignupPage } from './pages/signup/signup';
+// import { SignupPage } from './pages/signup/signup';
 import { Home } from './pages/home/home';
 
 @NgModule({
@@ -19,7 +19,7 @@ import { Home } from './pages/home/home';
     Login,
     HomeWrapper,
     Schedules,
-    SignupPage,
+    // SignupPage,
     Home
   ],
   imports: [
@@ -31,9 +31,9 @@ import { Home } from './pages/home/home';
     Login,
     HomeWrapper,
     Schedules,
-    SignupPage,
+    // SignupPage,
     Home
   ],
-  providers: [RegistrationService, WebSocketService, ScheduleService, EventBus, AndroidPlayBackService, IOSPlayBackService]
+  providers: [RegistrationService, WebSocketService, ScheduleService, EventBus,AndroidPlayBackService, IOSPlayBackService]
 })
 export class AppModule { }
