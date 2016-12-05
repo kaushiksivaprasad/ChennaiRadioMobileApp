@@ -1,8 +1,22 @@
-img{
-  // height: 30% !important;
-max-width:100%;
-max-height:100%;
-margin:auto;
-  width: auto;
-  height : auto;
+// img{
+//   // height: 30% !important;
+// max-width:100%;
+// max-height:100%;
+// margin:auto;
+//   width: auto;
+//   height : auto;
+// }
+.now-playing-card-div {
+  overflow-y: auto;
+  
+  .coverArt{
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  .floating-button{
+    position:relative;
+    margin-top:-18%;
+    left:80%
+  }
 }

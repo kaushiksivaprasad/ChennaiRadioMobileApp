@@ -49,7 +49,7 @@ export class ScheduleService {
                     let schedules = response.json();
                     if (schedules && schedules.length > 0) {
                         this.schedules = response.json();
-                        console.log('ScheduleService -> scheduleObtained' + JSON.stringify(this.schedules));
+                        console.log('ScheduleService -> scheduleObtained');
                         this.triggerFetchAtEndofSchedule();
                         this.scheduleRecieveEvent.emit(this.schedules);
                     }

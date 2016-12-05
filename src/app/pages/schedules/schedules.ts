@@ -8,14 +8,14 @@ import * as moment from 'moment';
 })
 export class Schedules {
     programs: Array<any> = [];
-    imgUrl: Array<any> = [
-        "assets/img/schedule1-min.jpg",
-        "assets/img/schedule2-min.jpg",
-        "assets/img/schedule3-min.jpg",
-        "assets/img/schedule4-min.jpg",
-        "assets/img/schedule5-min.jpg",
-        "assets/img/schedule6-min.jpg",
-        "assets/img/schedule7-min.jpg"];
+    imgUrl: Array<string> = [
+        'assets/img/schedule1-min.jpg',
+        'assets/img/schedule2-min.jpg',
+        'assets/img/schedule3-min.jpg',
+        'assets/img/schedule4-min.jpg',
+        'assets/img/schedule5-min.jpg',
+        'assets/img/schedule6-min.jpg',
+        'assets/img/schedule7-min.jpg'];
 
     constructor(private scheduleService: ScheduleService, private sanitizer: DomSanitizer) {
         if (this.scheduleService.schedules != null) {
@@ -34,6 +34,8 @@ export class Schedules {
             if (sh === 0) {
                 today = dayToSet;
             } else {
+                // This is the workaround for sunday. As sunday will be 0 
+                // which will be lesser than saturday (i.e. 6)
                 if (dayToSet < today) {
                     dayToSet = today + 1;
                 }

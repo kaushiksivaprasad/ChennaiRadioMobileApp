@@ -71,14 +71,6 @@
         "is_top_level": false,
         "variables": {}
     },
-    "nl-afas-cordova-plugin-securelocalstorage": {
-        "source": {
-            "type": "registry",
-            "id": "nl-afas-cordova-plugin-securelocalstorage"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "es6-promise-plugin": {
         "source": {
             "type": "git",

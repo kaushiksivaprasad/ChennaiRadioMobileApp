@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { AbstractBasePlayBack } from '../utils/abstract-base-playback'
+import { AbstractBasePlayBack } from '../utils/abstract-base-playback';
 
 declare var MusicControls: any;
 @Injectable()
@@ -25,12 +25,11 @@ export class AndroidPlayBackService extends AbstractBasePlayBack {
             // isPlaying will be true at this point..so dont have to 
             // call MusicControls.updateIsPlaying(true);
             this.createNotification();
-        }
-        else {
+        }else {
             // this needs to be called because when the user clicks the play button from
             // the notification and the app is in the background, 
             // we need to manually toggle notification icon to playing and not have to create a notification
-            //again
+            // again
             MusicControls.updateIsPlaying(true);
         }
     }
@@ -66,8 +65,8 @@ export class AndroidPlayBackService extends AbstractBasePlayBack {
                             console.log('AndroidPlayBackService -> music-controls-pause');
                             this.eventBus.streamActionEvent.emit(emittedEvent);
                             return setTimeout(() => {
-                                this.stopAndReleaseMedia()
-                            }, 10);
+                                this.stopAndReleaseMedia();
+                            }, 1);
                         case 'music-controls-play':
                             // Do something
                             this.loadMedia();

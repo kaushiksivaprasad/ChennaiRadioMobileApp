@@ -44,7 +44,7 @@ export class WebSocketService {
                 var evtMess = evt.data;
                 this.eventData = JSON.parse(evtMess);
                 this.adEvent.emit(this.eventData);
-                console.log('WebSocketService -> event recieved' + evtMess);
+                console.log('WebSocketService -> MessageEvent recieved');
                 // this.triggerListener(event);
             };
 

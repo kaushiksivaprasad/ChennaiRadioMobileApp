@@ -4,5 +4,8 @@
     "no-unused-variable": [
       true
     ]
-  }
+  },
+  "extends": [
+    "tslint-ionic-rules"
+  ]
 }

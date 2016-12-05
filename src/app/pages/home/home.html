@@ -10,13 +10,13 @@
     </div>
     <ion-item-group>
         <ion-item color="primary">Now Streaming</ion-item>
-        <div style="overflow-y: auto;">
+        <div class="now-playing-card-div">
             <ion-item>
                 <div>
                     <div [style.height]="cardImgHeight">
-                        <img src="assets/img/cover_art.jpg" style="height: 100% !important;">
+                        <img src="assets/img/cover_art.jpg" class="coverArt">
                     </div>
-                    <button large right ion-fab icon-only style="position:relative;margin-top:-18%;left:80%" (click)="onclick()">
+                    <button large right ion-fab icon-only (click)="onclick()" class="floating-button">
                         <ion-icon id="play" name="play" [style.display]="isStopped ? 'block': 'none'"></ion-icon>
                         <ion-icon id="pause" name="pause" [style.display]="isStopped ? 'none': 'block'"></ion-icon>
                     </button>

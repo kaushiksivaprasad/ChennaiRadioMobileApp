@@ -1,6 +1,27 @@
-img{
-  height: 30% !important;
-  display:block;
-  width: 100% !important;
+// img{
+//   height: 30% !important;
+//   display:block;
+//   width: 100% !important;
   
+// }
+.program-name-div{
+  float:left; 
+  width : 70%;
+
+  h2{
+    font-weight: bold;
+  }
+}
+.padding-top-10px{
+  padding-top : 10px
+}
+.padding-top-12px{
+  padding-top : 12px
+}
+.hosted-by-div{
+  float:left; 
+  width : 45%
+}
+.bold{
+  font-weight: bold;
 }

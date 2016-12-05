@@ -2,11 +2,9 @@ import { Injector } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import { EventBus } from '../service/eventbus';
 import { ScheduleService } from '../service/schedule';
-import Utils from './utils'
+import Utils from './utils';
 import Config from '../utils/system-config';
 
-declare var Media: any;
-declare var MusicControls: any;
 export class AbstractBasePlayBack {
     isPlaying = false;
     protected eventBus: EventBus;
@@ -27,11 +25,11 @@ export class AbstractBasePlayBack {
         console.log('AbstractBasePlayBack -> constructor');
         if (this.scheduleService.schedules != null) {
             let program = Utils.extractFirstProgramFromSchedule(this.scheduleService.schedules);
-            this.setNewScheduleInNotification(program);
+            this.setScheduleInfo(program);
         }
         this.scheduleService.scheduleRecieveEvent.subscribe(schedules => {
             let program = Utils.extractFirstProgramFromSchedule(this.scheduleService.schedules);
-            this.setNewScheduleInNotification(program);
+            this.setScheduleInfo(program);
         });
         this.eventBus.streamActionEvent.subscribe(event => {
             if (event.src !== this.THIS_CLASS) {
@@ -72,8 +70,7 @@ export class AbstractBasePlayBack {
         }
     }
 
-    setNewScheduleInNotification(program) {
-        //need to be overridden by the derived classess
+    setScheduleInfo(program) {
         if (program) {
             this.title = program.name;
             this.artist = program.hostedBy;
@@ -81,7 +78,7 @@ export class AbstractBasePlayBack {
             this.title = 'Chennai Radio Stream';
             this.artist = 'Chennai Radio';
         }
-
+        this.onNewScheduleRecieved();
     }
 
     onMediaStateChange(status) {
@@ -96,11 +93,13 @@ export class AbstractBasePlayBack {
         } else if (status === Media.MEDIA_RUNNING) {
             console.log('home-wrapper.html.ts  -> running');
             this.onMediaRunning();
-            if (this.prevStatus === Media.MEDIA_STARTING && this.loaderInstance) {
+            let tempPrevStatus = this.prevStatus;
+            this.prevStatus = status;
+            if (tempPrevStatus === Media.MEDIA_STARTING && this.loaderInstance) {
                 // there is a delay for the initial burst to start..and hence
                 // we show the loader
                 this.loaderInstance.dismiss();
-            } else if (this.prevStatus === Media.MEDIA_PAUSED) {
+            } else if (tempPrevStatus === Media.MEDIA_PAUSED) {
                 if (this.counter > 3) {
                     // when the user gets a call
                     this.stopAndReleaseMedia();
@@ -113,7 +112,6 @@ export class AbstractBasePlayBack {
                     this.counter = 0;
                 }
             }
-            this.prevStatus = status;
         } else if (status === Media.MEDIA_PAUSED) {
             this.onMediaPaused();
             this.prevStatus = status;

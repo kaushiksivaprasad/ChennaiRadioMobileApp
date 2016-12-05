@@ -18,8 +18,7 @@ export class HomeWrapper {
     public constructor(private injector: Injector, private platform: Platform) {
         if (this.platform.is('android')) {
             this.playBackService = this.injector.get(AndroidPlayBackService);
-        }
-        else if (this.platform.is('ios')) {
+        }else if (this.platform.is('ios')) {
             this.playBackService = this.injector.get(IOSPlayBackService);
         }
     }

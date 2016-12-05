@@ -13,7 +13,7 @@ class Config {
     STREM_RESOURCE = 'stream';
     LOGIN_INFO_STORAGE_KEY = 'loginInfo';
     RESOURCE_URL = 'resourceURL';
-    STREAM_URL = 'http://api.chennairadio.ca:8000/stream?date='
+    STREAM_URL = 'http://api.chennairadio.ca:8000/stream?date=';
 }
 let configObj = new Config();
 export default configObj;
