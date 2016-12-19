@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RegistrationService } from '../../service/registration';
 import { WebSocketService } from '../../service/websocket';
 import { AlertController, NavController, LoadingController } from 'ionic-angular';
+import { Splashscreen } from 'ionic-native';
 import { ScheduleService } from '../../service/schedule';
 import { HomeWrapper } from '../home-wrapper/home-wrapper';
 import { EventBus } from '../../service/eventbus';
@@ -30,6 +31,7 @@ export class Login {
     });
     this.loaderInstance.present();
     this.onLogin(this.emailId, this.password);
+    Splashscreen.hide();
   }
 
   onLogin(emailId: string, password: string) {

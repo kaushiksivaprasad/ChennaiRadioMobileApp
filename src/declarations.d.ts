@@ -14,3 +14,4 @@
 declare module '*';
 declare var Media: any;
 declare var cordova: any;
+// declare var Viewer: any;

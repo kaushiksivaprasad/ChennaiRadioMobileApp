@@ -2,8 +2,8 @@
     <div>
         <div *ngIf="imgUrl && imgUrl.length>0" [style.height]="adHeight">
             <ion-slides [options]="homeSliderOptions">
-                <ion-slide *ngFor="let img of imgUrl">
-                    <img [src]="img" />
+                <ion-slide *ngFor="let img of imgUrl;let i = index">
+                    <img [src]="img" (click)="openImgInFullScreenViewer(i)" />
                 </ion-slide>
             </ion-slides>
         </div>

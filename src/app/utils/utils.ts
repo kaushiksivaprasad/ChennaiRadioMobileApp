@@ -53,7 +53,7 @@ class Utils {
             name: null,
             hostedBy: null,
             artistImgUrl: null
-        }
+        };
         if (schedules[0].programs && schedules[0].programs.length > 0) {
             let dayToSet = schedules[0].dayPlayed;
             let endTimeInHour: number = + schedules[0].programs[0].endTimeInHour;

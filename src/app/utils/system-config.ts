@@ -14,6 +14,17 @@ class Config {
     LOGIN_INFO_STORAGE_KEY = 'loginInfo';
     RESOURCE_URL = 'resourceURL';
     STREAM_URL = 'http://api.chennairadio.ca:8000/stream?date=';
+    FULL_SCREEN_VIEWR_OPTIONS = {
+        navbar : 3,
+        title : false,
+        toolbar : false,
+        rotatable : false,
+        fullscreen : true,
+        keyboard : false,
+        transition : false
+    };
+    FULL_SCREEN_VIEWER_OPEN = 'fullScreenViewerOpen';
+    FULL_SCREEN_VIEWER_UPDATE_DATA= 'fullScreenViewerUpdateData';
 }
 let configObj = new Config();
 export default configObj;

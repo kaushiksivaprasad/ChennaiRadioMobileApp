@@ -4,6 +4,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 export class EventBus {
     public streamActionEvent = new EventEmitter<{ src: string, isPlaying: boolean }>();
     public signupSuccessfulEvent = new EventEmitter<{ emailId: string, password: string }>();
+    public fullScreenImgViewerEvent = new EventEmitter<{ eventType: string, data?: any }>();
     public resourceUrl: string;
 
     constructor() {
@@ -15,6 +16,10 @@ export class EventBus {
 
     triggerSignupSuccessfulEvent(userCredentials: { emailId: string, password: string }): void {
         this.signupSuccessfulEvent.emit(userCredentials);
+    }
+
+    triggerFullScreenImgViewerEvent(fullScreenEvent: { eventType: string, data: any }): void {
+        this.fullScreenImgViewerEvent.emit(fullScreenEvent);
     }
 
 }

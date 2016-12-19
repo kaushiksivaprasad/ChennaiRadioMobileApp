@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { WebSocketService } from '../../service/websocket';
 import { ScheduleService } from '../../service/schedule';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Platform } from 'ionic-angular';
 import { EventBus } from '../../service/eventbus';
 import Utils from '../../utils/utils';
+import Config from '../../utils/system-config';
 
 @Component({
     templateUrl: 'home.html'
@@ -50,7 +51,6 @@ export class Home {
                         this.processAndSetImageUrls(evt.mess);
                     }
                 }
-
             }
         });
         this.scheduleService.scheduleRecieveEvent.subscribe(schedules => {
@@ -105,9 +105,26 @@ export class Home {
         }
         this.imgUrl = null;
         this.imgUrl = messArray;
+        this.triggerUpdateInFullScreenViewer(messArray);
     }
 
     get THIS_CLASS() {
         return 'HOME';
+    }
+
+    openImgInFullScreenViewer(index) {
+        let emittedEvent = {
+            eventType: Config.FULL_SCREEN_VIEWER_OPEN,
+            data: index
+        };
+        this.eventBus.triggerFullScreenImgViewerEvent(emittedEvent);
+    }
+
+    triggerUpdateInFullScreenViewer(messArray) {
+        let emittedEvent = {
+            eventType: Config.FULL_SCREEN_VIEWER_UPDATE_DATA,
+            data: messArray
+        };
+        this.eventBus.triggerFullScreenImgViewerEvent(emittedEvent);
     }
 }
