@@ -21,7 +21,9 @@ class Config {
         rotatable : false,
         fullscreen : true,
         keyboard : false,
-        transition : false
+        transition : false,
+        zoomable : true,
+        movable : true
     };
     FULL_SCREEN_VIEWER_OPEN = 'fullScreenViewerOpen';
     FULL_SCREEN_VIEWER_UPDATE_DATA= 'fullScreenViewerUpdateData';

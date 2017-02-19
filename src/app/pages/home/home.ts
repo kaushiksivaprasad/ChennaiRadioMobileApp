@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { WebSocketService } from '../../service/websocket';
 import { ScheduleService } from '../../service/schedule';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -33,7 +33,7 @@ export class Home {
         private platform: Platform,
         private eventBus: EventBus) {
         this.adHeight = (platform.height() * .33) + 'px';
-        this.cardImgHeight = (platform.height() * .28) + 'px';
+        this.cardImgHeight = (platform.height() * .18) + 'px';
 
         this.wsService.adEvent.subscribe(evt => {
             if (evt.mess) {
@@ -126,5 +126,9 @@ export class Home {
             data: messArray
         };
         this.eventBus.triggerFullScreenImgViewerEvent(emittedEvent);
+    }
+
+    onCall() {
+        window.open('tel:+19058056535');
     }
 }

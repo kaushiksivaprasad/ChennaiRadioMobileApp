@@ -6,6 +6,9 @@
 //   width: auto;
 //   height : auto;
 // }
+.no-scroll .scroll-content{
+     overflow-y: hidden !important;
+}
 .now-playing-card-div {
   overflow-y: auto;
   
@@ -18,5 +21,31 @@
     position:relative;
     margin-top:-18%;
     left:80%
+  }
+  .avatarImg{
+    height: 100px;
+    width: 100px;
+  }
+  .programDiv{
+    width : 50%;
+    float : left
+  }
+  .programActionDiv{
+    width: 50%;
+    float: left
+  }
+  .programActionDiv button{
+    display: block;
+    margin:auto;
+    margin-top: 16px;
+    width : 80%;
+  }
+  .programNameDiv{
+    clear: both;
+    padding-top: 8px;
+  }
+  .hostedBy{
+    font-size: x-large;
+    vertical-align: sub;
   }
 }

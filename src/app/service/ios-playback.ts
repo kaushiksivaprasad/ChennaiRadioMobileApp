@@ -56,26 +56,26 @@ export class IOSPlayBackService extends AbstractBasePlayBack {
     displayMeta(flush) {
         let artist = this.artist;
         let title = this.title;
+        if (typeof cordova !== 'undefined' && cordova) {
+            let url = cordova.file.applicationDirectory + 'www/assets/img/music_cover_art.png';
+            window.resolveLocalFileSystemURL(url, (entry) => {
+                let img = entry.toInternalURL();
+                if (flush) {
+                    artist = '';
+                    title = '';
+                    img = '';
+                }
+                var params = [artist, title, title, img, '', ''];
+                console.log('final image url IOSPlayBackService -> url ' + img);
+                window.remoteControls.updateMetas((success) => {
+                    console.log('IOSPlayBackService -> updateMeta ' + success);
+                    this.metaDisplayed = true;
 
-        let url = cordova.file.applicationDirectory + 'www/assets/img/music_cover_art.png';
-        window.resolveLocalFileSystemURL(url, (entry) => {
-            let img = entry.toInternalURL();
-            if (flush) {
-                artist = '';
-                title = '';
-                img = '';
-            }
-            var params = [artist, title, title, img, '', ''];
-            console.log('final image url IOSPlayBackService -> url ' + img);
-            window.remoteControls.updateMetas((success) => {
-                console.log('IOSPlayBackService -> updateMeta ' + success);
-                this.metaDisplayed = true;
+                }, (fail) => {
+                    console.log('IOSPlayBackService -> updateMeta ' + fail);
 
-            }, (fail) => {
-                console.log('IOSPlayBackService -> updateMeta ' + fail);
-
-            }, params);
-        });
-
+                }, params);
+            });
+        }
     }
 }

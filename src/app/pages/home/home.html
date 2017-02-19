@@ -1,39 +1,47 @@
-<ion-content>
+<ion-content class="no-scroll">
     <div>
         <div *ngIf="imgUrl && imgUrl.length>0" [style.height]="adHeight">
-            <ion-slides [options]="homeSliderOptions">
+            <ion-slides autoplay="{{homeSliderOptions.autoplay}}" loop="{{homeSliderOptions.loop}}" pager="{{homeSliderOptions.pager}}">
                 <ion-slide *ngFor="let img of imgUrl;let i = index">
                     <img [src]="img" (click)="openImgInFullScreenViewer(i)" />
                 </ion-slide>
             </ion-slides>
         </div>
     </div>
-    <ion-item-group>
+    <ion-item-group no-padding>
         <ion-item color="primary">Now Streaming</ion-item>
         <div class="now-playing-card-div">
             <ion-item>
-                <div>
-                    <div [style.height]="cardImgHeight">
-                        <img src="assets/img/cover_art.jpg" class="coverArt">
+                <ion-label>
+                    <div>
+                        <div [style.height]="cardImgHeight">
+                            <img src="assets/img/cover_art.jpg" class="coverArt">
+                        </div>
+                        <div *ngIf="program.name" class='programDiv'>
+                            <h1 ion-text color="primary" padding-left>{{ program.name }}</h1>
+                                <ion-avatar large padding-left margin-left>
+                                    <img class='avatarImg' [src]="program.artistImgUrl">
+                                </ion-avatar>
+                        </div>
+                        <div *ngIf="!program.name" class='programDiv'>
+                            <h1 ion-text color="primary">Program</h1>
+                        </div>
+                        <div class='programActionDiv' padding-top>
+                            <button round ion-button icon-only text-capitalize (click)="onclick()" mode="md">
+                                 <ion-icon id="play" name="play" [style.display]="isStopped ? 'block': 'none'">&nbsp;Play</ion-icon>
+                                <ion-icon id="pause" name="pause" [style.display]="isStopped ? 'none': 'block'">&nbsp;Pause</ion-icon>
+                            </button>
+                            <button round ion-button icon-only text-capitalize color="secondary" (click)="onCall()" mode="md">
+                                <ion-icon name="call">&nbsp;Call us</ion-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="program.name" class='programNameDiv' margin-left>
+                            <h2 padding-left>Hosted By: 
+                                <span class="hostedBy" text-capitalize color="primary">{{ program.hostedBy }}</span>
+                            </h2>
+                        </div>
                     </div>
-                    <button large right ion-fab icon-only (click)="onclick()" class="floating-button">
-                        <ion-icon id="play" name="play" [style.display]="isStopped ? 'block': 'none'"></ion-icon>
-                        <ion-icon id="pause" name="pause" [style.display]="isStopped ? 'none': 'block'"></ion-icon>
-                    </button>
-                    <div *ngIf="program.name">
-                        <h1 color="primary" padding-left>{{ program.name }}</h1>
-                        <ion-item>
-                            <h2>Hosted By: </h2>
-                            <h2 text-capitalize>{{ program.hostedBy }}</h2>
-                            <ion-avatar item-left large>
-                                <img [src]="program.artistImgUrl">
-                            </ion-avatar>
-                        </ion-item>
-                    </div>
-                    <div *ngIf="!program.name">
-                        <h1 color="primary">Program</h1>
-                    </div>
-                </div>
+                </ion-label>
             </ion-item>
         </div>
     </ion-item-group>
