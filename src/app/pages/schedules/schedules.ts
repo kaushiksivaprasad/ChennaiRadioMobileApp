@@ -24,11 +24,13 @@ export class Schedules {
         this.scheduleService.scheduleRecieveEvent.subscribe(schedules => {
             this.setSchedule(schedules);
         });
+        console.log('Schedules -> constructor');
     }
 
     setSchedule(schedules) {
         let imgcount = 0;
         let today = 0;
+        this.programs = [];
         for (var sh = 0; sh < schedules.length; sh++) {
             let dayToSet = schedules[sh].dayPlayed;
             if (sh === 0) {

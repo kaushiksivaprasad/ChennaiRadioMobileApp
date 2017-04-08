@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import Config from '../utils/system-config';
 import * as moment from 'moment';
+import { Platform } from 'ionic-angular';
 
 @Injectable()
 export class ScheduleService {
@@ -10,7 +11,12 @@ export class ScheduleService {
     private timeout = null;
     public resourceUrl: String = null;
     public scheduleRecieveEvent = new EventEmitter<any>();
-    constructor(public http: Http) {
+    constructor(public http: Http,
+    public platform: Platform) {
+        platform.resume.subscribe(() => {
+            console.log('App Resume event thrown');
+            return this.getSchedule();
+        });
     }
     triggerFetchAtEndofSchedule(): void {
         // All time is converted to GMT
@@ -38,7 +44,6 @@ export class ScheduleService {
             }
         }
     }
-
 
     getSchedule(): void {
         if (this.resourceUrl) {

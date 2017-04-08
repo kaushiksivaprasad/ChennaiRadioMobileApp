@@ -35,6 +35,7 @@ export class HomeWrapper implements AfterViewInit {
         }
         this.eventBus.fullScreenImgViewerEvent.subscribe(event => {
             if (event.eventType === Config.FULL_SCREEN_VIEWER_OPEN) {
+                console.log('HomeWrapper -> recieved fullScreen viewer open event');
                 this.openImgInFullScreen(event.data);
             } else if (event.eventType === Config.FULL_SCREEN_VIEWER_UPDATE_DATA) {
                 this.imgUrls = event.data;
@@ -58,10 +59,12 @@ export class HomeWrapper implements AfterViewInit {
                 }
             }
         });
+        console.log('HomeWrapper -> loaded');
     }
 
     createFullScreenImgViewer() {
         if (this.imageWrapper) {
+            console.log('HomeWrapper -> createFullScreenImgViewer');
             let fullScreenViewerConfig: any = Config.FULL_SCREEN_VIEWR_OPTIONS;
             fullScreenViewerConfig.ready = () => {
                 console.log('HomeWrapper -> fullScreenViewer -> ready');
@@ -81,12 +84,14 @@ export class HomeWrapper implements AfterViewInit {
                 }, 10);
             };
             //  https://fengyuanchen.github.io/viewerjs/
-            this.fullScreenImgViewer = new Viewer(this.imageWrapper.nativeElement, fullScreenViewerConfig);
+                this.fullScreenImgViewer = new Viewer(this.imageWrapper.nativeElement, fullScreenViewerConfig);
+                console.log(this.fullScreenImgViewer);
         }
     }
 
     openImgInFullScreen(index) {
         if (this.imageWrapper) {
+            console.log('HomeWrapper -> openImgInFullScreen');
             if (!this.fullScreenImgViewer) {
                 this.createFullScreenImgViewer();
             }

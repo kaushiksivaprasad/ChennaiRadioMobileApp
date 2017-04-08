@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { WebSocketService } from '../../service/websocket';
 import { ScheduleService } from '../../service/schedule';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AlertController } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { EventBus } from '../../service/eventbus';
+import { NetworkDetectionService } from '../../service/network-detection';
 import Utils from '../../utils/utils';
 import Config from '../../utils/system-config';
+
 
 @Component({
     templateUrl: 'home.html'
@@ -26,12 +29,16 @@ export class Home {
         loop: true,
         pager: true
     };
+    networkStatus = true;
 
     constructor(private wsService: WebSocketService,
         private scheduleService: ScheduleService,
         private sanitizer: DomSanitizer,
         private platform: Platform,
-        private eventBus: EventBus) {
+        private eventBus: EventBus,
+        private networkDetectionService: NetworkDetectionService,
+        private alertCtrl: AlertController,
+        private ref: ChangeDetectorRef) {
         this.adHeight = (platform.height() * .33) + 'px';
         this.cardImgHeight = (platform.height() * .18) + 'px';
 
@@ -76,25 +83,38 @@ export class Home {
                 } else {
                     this.isStopped = true;
                 }
+                this.ref.detectChanges();
             }
         });
         this.wsService.initiateWebSocket();
         this.scheduleService.getSchedule();
+
+        this.networkDetectionService.networkConnectionStatusEvent.subscribe((event) => {
+            let prevStatus = this.networkStatus;
+            this.networkStatus = event.networkAvailable;
+            if (prevStatus === true && this.networkStatus === false) {
+                this.displayNetworkNotAvailablePopup();
+            }
+        });
     }
 
-    onclick() {
-        let emittedEvent = {
-            src: this.THIS_CLASS,
-            isPlaying: null
-        };
-        if (this.isStopped) {
-            this.isStopped = false;
-            emittedEvent.isPlaying = true;
-            this.eventBus.triggerStreamActionEvent(emittedEvent);
+    onclick(override = false) {
+        if (!!this.networkStatus || override) {
+            let emittedEvent = {
+                src: this.THIS_CLASS,
+                isPlaying: null
+            };
+            if (this.isStopped) {
+                this.isStopped = false;
+                emittedEvent.isPlaying = true;
+                this.eventBus.triggerStreamActionEvent(emittedEvent);
+            } else {
+                this.isStopped = true;
+                emittedEvent.isPlaying = false;
+                this.eventBus.triggerStreamActionEvent(emittedEvent);
+            }
         } else {
-            this.isStopped = true;
-            emittedEvent.isPlaying = false;
-            this.eventBus.triggerStreamActionEvent(emittedEvent);
+            this.displayNetworkNotAvailablePopup();
         }
     }
 
@@ -117,6 +137,7 @@ export class Home {
             eventType: Config.FULL_SCREEN_VIEWER_OPEN,
             data: index
         };
+        console.log('Home -> img clicked');
         this.eventBus.triggerFullScreenImgViewerEvent(emittedEvent);
     }
 
@@ -130,5 +151,24 @@ export class Home {
 
     onCall() {
         window.open('tel:+19058056535');
+    }
+
+    displayNetworkNotAvailablePopup() {
+        if (!!!this.networkStatus) {
+            let alert = this.alertCtrl.create({
+                title: 'Network Disconnected',
+                subTitle: 'Please try again later.',
+                buttons: [{
+                    text: 'Ok',
+                    role: 'cancel',
+                    handler: () => {
+                        if (!this.isStopped) {
+                            this.onclick(true);
+                        }
+                    }
+                }]
+            });
+            alert.present();
+        }
     }
 }

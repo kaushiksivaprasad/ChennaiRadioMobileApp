@@ -8,11 +8,13 @@ import { EventBus } from './service/eventbus';
 import { AndroidPlayBackService } from './service/android-playback';
 import { IOSPlayBackService } from './service/ios-playback';
 import {RatingService} from './service/RatingService';
+import {NetworkDetectionService} from './service/network-detection';
 import { Login } from './pages/login/login';
 import { HomeWrapper } from './pages/home-wrapper/home-wrapper';
 import { Schedules } from './pages/schedules/schedules';
 // import { SignupPage } from './pages/signup/signup';
 import { Home } from './pages/home/home';
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { Home } from './pages/home/home';
     // SignupPage,
     Home
   ],
-  providers: [RegistrationService, WebSocketService, ScheduleService, EventBus, AndroidPlayBackService, IOSPlayBackService, RatingService]
+  providers: [RegistrationService, WebSocketService, ScheduleService, EventBus, AndroidPlayBackService, IOSPlayBackService, RatingService,
+  Network, NetworkDetectionService]
 })
 export class AppModule { }

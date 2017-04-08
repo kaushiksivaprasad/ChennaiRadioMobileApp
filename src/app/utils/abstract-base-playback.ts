@@ -17,12 +17,14 @@ export class AbstractBasePlayBack {
     media: any = null;
     title = 'Chennai Radio Stream';
     artist = 'Chennai Radio';
+    duration = 0;
+    elapsed = 0;
+    artistImgUrl = '';
 
     public constructor(injector: Injector) {
         this.eventBus = injector.get(EventBus);
         this.loadingController = injector.get(LoadingController);
         this.scheduleService = injector.get(ScheduleService);
-        console.log('AbstractBasePlayBack -> constructor');
         if (this.scheduleService.schedules != null) {
             let program = Utils.extractFirstProgramFromSchedule(this.scheduleService.schedules);
             this.setScheduleInfo(program);
@@ -39,11 +41,12 @@ export class AbstractBasePlayBack {
                         this.loadMedia();
                     } else {
                         this.isPlaying = false;
-                        this.stopAndReleaseMedia();
+                        this.destroyNotificationAndStopMedia();
                     }
                 }
             }
         });
+        console.log('AbstractBasePlayBack -> loaded');
     }
 
     loadMedia() {
@@ -60,13 +63,26 @@ export class AbstractBasePlayBack {
         this.media.play();
     }
 
-    protected stopAndReleaseMedia() {
+    protected stopMedia() {
         if (this.media) {
-            console.log('stopping stream');
+            console.log('stopping media');
             this.media.stop();
             this.media.release();
             this.media = null;
+            return true;
+        }
+        return false;
+    }
+
+    protected stopAndReleaseMedia() {
+        if (this.stopMedia()) {
             this.onMediaStopped();
+        }
+    }
+
+    protected destroyNotificationAndStopMedia() {
+        if (this.stopMedia()) {
+            this.onNotificationDestroy();
         }
     }
 
@@ -74,15 +90,21 @@ export class AbstractBasePlayBack {
         if (program) {
             this.title = program.name;
             this.artist = program.hostedBy;
+            this.duration = program.duration;
+            this.elapsed = program.elapsed;
+            this.artistImgUrl = this.scheduleService.resourceUrl.substring(0, this.scheduleService.resourceUrl.length - 1) + program.artistImgUrl;
         } else {
             this.title = 'Chennai Radio Stream';
             this.artist = 'Chennai Radio';
+            this.artistImgUrl = '';
         }
         this.onNewScheduleRecieved();
     }
 
     onMediaStateChange(status) {
-        if (status === Media.MEDIA_STARTING) {
+        if (status === Media.MEDIA_STOPPED) {
+            console.log('AbstractBasePlayBack  -> stopped');
+        } else if (status === Media.MEDIA_STARTING) {
             this.onMediaStarting();
             this.counter = 0;
             this.prevStatus = status;
@@ -91,7 +113,7 @@ export class AbstractBasePlayBack {
             });
             this.loaderInstance.present();
         } else if (status === Media.MEDIA_RUNNING) {
-            console.log('home-wrapper.html.ts  -> running');
+            console.log('AbstractBasePlayBack  -> running');
             this.onMediaRunning();
             let tempPrevStatus = this.prevStatus;
             this.prevStatus = status;
@@ -113,9 +135,9 @@ export class AbstractBasePlayBack {
                 }
             }
         } else if (status === Media.MEDIA_PAUSED) {
-            this.onMediaPaused();
+            this.onMediaStopped();
             this.prevStatus = status;
-            console.log('home-wrapper.html.ts  -> paused');
+            console.log('AbstractBasePlayBack  -> paused');
             this.timer = setInterval(() => {
                 this.counter += 1;
             }, 1000);
@@ -134,11 +156,11 @@ export class AbstractBasePlayBack {
         // need to be overridden by derived classes
     }
 
-    protected onMediaPaused() {
+    protected onNewScheduleRecieved() {
         // need to be overridden by derived classes
     }
 
-    protected onNewScheduleRecieved() {
+    protected onNotificationDestroy() {
         // need to be overridden by derived classes
     }
 

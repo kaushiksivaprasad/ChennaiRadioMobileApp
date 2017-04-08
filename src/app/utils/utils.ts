@@ -47,12 +47,16 @@ class Utils {
     extractFirstProgramFromSchedule(schedules): {
         name: string,
         hostedBy: string,
-        artistImgUrl: any
+        artistImgUrl: any,
+        duration: number,
+        elapsed: number
     } {
         let program = {
             name: null,
             hostedBy: null,
-            artistImgUrl: null
+            artistImgUrl: null,
+            duration : null,
+            elapsed: null
         };
         if (schedules[0].programs && schedules[0].programs.length > 0) {
             let dayToSet = schedules[0].dayPlayed;
@@ -70,6 +74,8 @@ class Utils {
                 program.name = schedules[0].programs[0].programName;
                 program.hostedBy = schedules[0].programs[0].hostedBy;
                 program.artistImgUrl = schedules[0].programs[0].artistImgUrl;
+                program.duration = endTime - startTime;
+                program.elapsed = currentTime - startTime;
                 return program;
             }
         }
